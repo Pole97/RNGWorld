@@ -67,6 +67,9 @@ public class MapGenerator : MonoBehaviour {
             seedText.text = seed.ToString();
             GenerateMap();
         }
+        if (Input.GetButton("Quit")) {
+            Application.Quit();
+        }
     }
 
     public void GenerateMapFromButton() {
