@@ -1,11 +1,8 @@
 using System;
 using System.Collections;
-using Unity.Burst.Intrinsics;
-using UnityEditor.Build.Content;
 using UnityEngine;
 
 public static class Noise {
-
     public static float[,] GenerateNoiseMap(int mapWidth, int mapHeight, int seed, float scale, float zoom2, int octaves, float persistance, float lacunarity, Vector2 offset, float distortionStrength) {
         float[,] noiseMap = new float[mapWidth, mapHeight];
 
