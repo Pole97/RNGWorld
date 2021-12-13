@@ -69,6 +69,7 @@ public class MapGenerator : MonoBehaviour {
         }
         if (Input.GetButton("Quit")) {
             Application.Quit();
+
         }
     }
 
