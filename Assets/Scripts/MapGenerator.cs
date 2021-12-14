@@ -109,7 +109,7 @@ public class MapGenerator : MonoBehaviour {
         elevationMap = FillSmallOceans(elevationMap, (float)Math.Pow(2 * noiseScale, 2), seaLevel, seaLevel + 0.1f);
         elevationMap = FillSmallOceans(elevationMap, (float)Math.Pow(2 * noiseScale, 2), seaLevel + 0.01f, seaLevel + 0.05f);
         //fill small islands
-        elevationMap = ReverseMatrix(FillSmallOceans(ReverseMatrix(elevationMap), 10, seaLevel, seaLevel + 0.05f));
+        elevationMap = Utils.ReverseMatrix(FillSmallOceans(Utils.ReverseMatrix(elevationMap), 10, seaLevel, seaLevel + 0.05f));
 
         biomeGenerator = new BiomeGenerator(elevationMap, mapSize, seed, offsetTemperature, offsetTemperatureCurveShift, offsetTemperaturePeriod, seaLevel, noiseScale);
 
@@ -206,15 +206,6 @@ public class MapGenerator : MonoBehaviour {
             octaves = 0;
         }
         falloffMap = FalloffGenerator.GenerateFalloffMap(mapSize);
-    }
-
-    float[,] ReverseMatrix(float[,] m) {
-        for (int i = 0; i < m.GetLength(0); i++) {
-            for (int j = 0; j < m.GetLength(1); j++) {
-                m[i, j] = -m[i, j];
-            }
-        }
-        return m;
     }
 
     public static int GetSeed() {
