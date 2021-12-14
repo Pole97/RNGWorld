@@ -680,7 +680,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e7825f5e670842b47afeb6ffe0167565, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSpeed: 5
+  moveSpeed: 10
   scrollSpeed: 300
   cam: {fileID: 519420031}
   boundary: {fileID: 1939619485}

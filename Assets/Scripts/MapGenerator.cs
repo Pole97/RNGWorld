@@ -21,7 +21,7 @@ public class MapGenerator : MonoBehaviour {
 
     public float distortionStrength = 0.5f;
 
-    public static int seed;
+    public int seed;
     public TMP_Text seedText;
     public TMP_InputField inputSeed;
     public Vector2 offset;
@@ -208,7 +208,7 @@ public class MapGenerator : MonoBehaviour {
         falloffMap = FalloffGenerator.GenerateFalloffMap(mapSize);
     }
 
-    public static int GetSeed() {
+    public int GetSeed() {
         return seed;
     }
 
