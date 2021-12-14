@@ -5,18 +5,50 @@ using UnityEngine;
 public class CameraController : MonoBehaviour {
     public float moveSpeed = 1f;
     public float scrollSpeed = 100f;
+    public Camera cam;
 
+    private BoxCollider2D cameraBox;
+    public BoxCollider2D boundary;
+
+    private float leftPivot;
+    private float rightPivot;
+    private float topPivot;
+    private float botPivot;
+
+    void Start() {
+        cam = Camera.main;
+        cameraBox = cam.GetComponent<BoxCollider2D>();
+    }
+
+    void AspectRatioBoxChange() {
+        float height = 2 * cam.orthographicSize;
+        float width = height * cam.aspect;
+        cameraBox.size = new Vector2(width, height);
+    }
+
+    void CalculateCameraPivot() {
+        botPivot = boundary.bounds.min.y + cameraBox.size.y / 2;
+        topPivot = boundary.bounds.max.y - cameraBox.size.y / 2;
+        leftPivot = boundary.bounds.min.x + cameraBox.size.x / 2;
+        rightPivot = boundary.bounds.max.x - cameraBox.size.x / 2;
+
+    }
     void Update() {
+        AspectRatioBoxChange();
+        CalculateCameraPivot();
+        Vector3 targetPosition = transform.position;
+        float tagetSize = cam.orthographicSize;
         if (Input.GetAxisRaw("Horizontal") != 0 || Input.GetAxisRaw("Vertical") != 0) {
-            transform.position += moveSpeed * new Vector3(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"), 0);
+            targetPosition = transform.position + moveSpeed * new Vector3(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"), 0);
         }
 
         if (Input.GetAxis("Mouse ScrollWheel") != 0) {
-            transform.position += scrollSpeed * new Vector3(0, 0, -Input.GetAxis("Mouse ScrollWheel"));
+            tagetSize = cam.orthographicSize - scrollSpeed * Input.GetAxis("Mouse ScrollWheel");
         }
         transform.position = new Vector3(
-            Mathf.Clamp(transform.position.x, -2500, 2500),
-            Mathf.Clamp(transform.position.y, -2500, 2500),
-            Mathf.Clamp(transform.position.z, -5000, -100));
+            Mathf.Clamp(targetPosition.x, leftPivot, rightPivot),
+            Mathf.Clamp(targetPosition.y, botPivot, topPivot),
+            transform.position.z);
+        cam.orthographicSize = Mathf.Clamp(tagetSize, 100, 1000);
     }
 }
