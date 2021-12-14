@@ -5,7 +5,7 @@ using Unity.Burst;
 public class Utils {
     public static float[,] ShiftMat(int n, int axis, float[,] m) {
         if (n > 0) {
-            //Prendo l'ultima riga/colonna
+            //Take the last row/column
             float[] salvata = new float[m.GetLength(0)];
             for (int j = 0; j < m.GetLength(0); j++) {
                 if (axis == 0) {
@@ -15,7 +15,7 @@ public class Utils {
                 }
             }
 
-            //sposto le altre righe/colonne
+            //Shift the other rows/columns
             for (int i = m.GetLength(0) - 1; i >= n; i--) {
                 for (int j = 0; j < m.GetLength(0); j++) {
                     if (axis == 0) {
@@ -26,7 +26,7 @@ public class Utils {
                 }
             }
 
-            //rimetto la riga/colonna salvata
+            //Replace the row/column saved to the first one
             for (int j = 0; j < m.GetLength(0); j++) {
                 if (axis == 0) {
                     m[0, j] = salvata[j];
@@ -35,7 +35,7 @@ public class Utils {
                 }
             }
         } else if (n < 0) {
-            //Prendo la prima riga/colonna
+            //Take the last row/column
             float[] salvata = new float[m.GetLength(0)];
             for (int j = 0; j < m.GetLength(0); j++) {
                 if (axis == 0) {
@@ -45,7 +45,7 @@ public class Utils {
                 }
             }
 
-            //sposto le altre righe/colonne
+            //Shift the other rows/columns
             for (int i = 0; i < m.GetLength(0) + n; i++) {
                 for (int j = 0; j < m.GetLength(0); j++) {
                     if (axis == 0) {
@@ -56,7 +56,7 @@ public class Utils {
                 }
             }
 
-            //sostituisco la riga/colonna salvata alla prima riga
+            //Replace the row/column saved to the last one
             for (int j = 0; j < m.GetLength(0); j++) {
                 if (axis == 0) {
                     m[m.GetLength(0) - 1, j] = salvata[j];
@@ -74,5 +74,14 @@ public class Utils {
 
     public static bool linearBound3(float a, float b, float c, float minA, float minB, float minC) {
         return a / minA + b / minB + c / minC >= 1f;
+    }
+
+    public static float[,] ReverseMatrix(float[,] m) {
+        for (int i = 0; i < m.GetLength(0); i++) {
+            for (int j = 0; j < m.GetLength(1); j++) {
+                m[i, j] = -m[i, j];
+            }
+        }
+        return m;
     }
 }

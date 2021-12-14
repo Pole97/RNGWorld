@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using Unity.Mathematics;
 using UnityEngine;
 
 public class BiomeGenerator {
@@ -454,7 +453,7 @@ public class BiomeGenerator {
         GenerateFlowMap();
         GenerateUnevenessMap();
         Color[] biomeMap = new Color[mapSize * mapSize];
-        float shade; //= new float[mapSize * mapSize];
+        float shade;
         for (int x = 0; x < mapSize; x++) {
             for (int y = 0; y < mapSize; y++) {
                 string name = GetBiome(elevationMap[x, y], temperatureMap[x, y], fillMap[x, y], rainMap[x, y], flowMap[x, y], unevenessMap[x, y]);
