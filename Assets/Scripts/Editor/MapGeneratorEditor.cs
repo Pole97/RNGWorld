@@ -17,7 +17,8 @@ public class MapGeneratorEditor : Editor {
             }
         }
 
-        DrawSettingsEditor(mapGen.noiseSettings, mapGen.OnNoiseSettingsUpdated, ref mapGen.noiseSettingsFaldout, ref noiseEditor);
+        DrawSettingsEditor(mapGen.settings.noiseSettings, mapGen.OnNoiseSettingsUpdated, ref mapGen.noiseSettingsFaldout, ref noiseEditor);
+        DrawSettingsEditor(mapGen.settings, mapGen.OnSettingsUpdated, ref mapGen.settingsFaldout, ref noiseEditor);
 
         if (GUILayout.Button("Generate")) {
             mapGen.GenerateMap();

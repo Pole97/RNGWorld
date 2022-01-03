@@ -6,12 +6,12 @@ public class Utils {
     public static float[,] ShiftMat(int n, int axis, float[,] m) {
         if (n > 0) {
             //Take the last row/column
-            float[] salvata = new float[m.GetLength(0)];
+            float[] saved = new float[m.GetLength(0)];
             for (int j = 0; j < m.GetLength(0); j++) {
                 if (axis == 0) {
-                    salvata[j] = m[m.GetLength(0) - 1, j];
+                    saved[j] = m[m.GetLength(0) - 1, j];
                 } else {
-                    salvata[j] = m[j, m.GetLength(0) - 1];
+                    saved[j] = m[j, m.GetLength(0) - 1];
                 }
             }
 
@@ -29,9 +29,9 @@ public class Utils {
             //Replace the row/column saved to the first one
             for (int j = 0; j < m.GetLength(0); j++) {
                 if (axis == 0) {
-                    m[0, j] = salvata[j];
+                    m[0, j] = saved[j];
                 } else {
-                    m[j, 0] = salvata[j];
+                    m[j, 0] = saved[j];
                 }
             }
         } else if (n < 0) {

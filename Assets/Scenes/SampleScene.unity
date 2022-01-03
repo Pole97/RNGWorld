@@ -1645,47 +1645,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b04e75877e3fec349926f401e4d91c87, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  drawMode: 2
-  mapSize: 500
-  noiseScale: 40
+  drawMode: 0
+  settings: {fileID: 11400000, guid: 985982f5d3953bf4ca78b069c367263e, type: 2}
   noiseSettings: {fileID: 11400000, guid: 686953d6400ba4a4d8346287ca3f90ef, type: 2}
   noiseSettingsFaldout: 1
+  settingsFaldout: 1
   seed: 4454
-  useFalloff: 1
   autoUpdate: 0
-  regions:
-  - name: Water Deep
-    height: -0.5
-    color: {r: 0.078431375, g: 0.34509805, b: 0.92156863, a: 0}
-  - name: Water Shallow
-    height: 0
-    color: {r: 0.2783019, g: 0.44048122, b: 1, a: 0}
-  - name: Sand
-    height: 0.05
-    color: {r: 0.7417659, g: 0.74509805, b: 0.066666655, a: 0}
-  - name: Grass
-    height: 0.2
-    color: {r: 0.14925043, g: 0.745283, b: 0.06679422, a: 0}
-  - name: Grass 2
-    height: 0.4
-    color: {r: 0.13881782, g: 0.5377358, b: 0.083704166, a: 0}
-  - name: Forest
-    height: 0.6
-    color: {r: 0.05227632, g: 0.3490566, b: 0.018111428, a: 0}
-  - name: Rock
-    height: 0.7
-    color: {r: 0.5471698, g: 0.2361503, b: 0.12130651, a: 0}
-  - name: Rock 2
-    height: 0.9
-    color: {r: 0.2924528, g: 0.0828709, b: 0.006897471, a: 0}
-  - name: Snow
-    height: 1
-    color: {r: 1, g: 1, b: 1, a: 0}
-  seaLevel: 0
-  offsetTemperaturePeriod: 1.4
-  offsetTemperatureCurveShift: 2.7
-  offsetTemperature: 0
-  minOceanSize: 5000
 --- !u!114 &1158349630
 MonoBehaviour:
   m_ObjectHideFlags: 0
