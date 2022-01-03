@@ -1,5 +1,4 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
@@ -12,14 +11,15 @@ public class MapGenerator : MonoBehaviour {
     float zoom;
 
     public Settings settings;
+
     [HideInInspector]
     public bool noiseSettingsFaldout;
     [HideInInspector]
     public bool settingsFaldout;
 
-    public int seed;
-    TMP_Text seedText;
-    TMP_InputField inputSeed;
+    public TMP_Text seedText;
+
+    public TMP_InputField inputSeed;
 
     public bool autoUpdate;
 
@@ -35,8 +35,8 @@ public class MapGenerator : MonoBehaviour {
 
     void Start() {
         System.Random prng = new();
-        seed = prng.Next();
-        seedText.text = seed.ToString();
+        settings.seed = prng.Next();
+        seedText.text = settings.seed.ToString();
         GenerateMap();
     }
 
@@ -46,8 +46,8 @@ public class MapGenerator : MonoBehaviour {
         }
         if (Input.GetButton("RandomSeed")) {
             System.Random prng = new();
-            seed = prng.Next();
-            seedText.text = seed.ToString();
+            settings.seed = prng.Next();
+            seedText.text = settings.seed.ToString();
             GenerateMap();
         }
         if (Input.GetButton("Quit")) {
@@ -62,9 +62,9 @@ public class MapGenerator : MonoBehaviour {
     public void GenerateMapFromButton() {
         if (!inputSeed.text.Equals("")) {
             try {
-                seed = Convert.ToInt32(inputSeed.text);
+                settings.seed = Convert.ToInt32(inputSeed.text);
                 GenerateMap();
-                seedText.text = seed.ToString();
+                seedText.text = settings.seed.ToString();
             } catch (System.Exception) {
                 Debug.LogError("Seed format not recognizable");
                 throw;
@@ -74,9 +74,10 @@ public class MapGenerator : MonoBehaviour {
 
     void GenerateHeightMap() {
         zoom = settings.mapSize / 100f;
-        baseNoiseMap = Noise.GenerateNoiseMap(settings.mapSize, settings.mapSize, seed + 66, settings.noiseScale, zoom, 2, 0.5f,
+        falloffMap = FalloffGenerator.GenerateFalloffMap(settings.mapSize);
+        baseNoiseMap = Noise.GenerateNoiseMap(settings.mapSize, settings.mapSize, settings.seed + 66, settings.noiseScale, zoom, 2, 0.5f,
                                                 settings.noiseSettings.lacunarity, settings.noiseSettings.offset, settings.noiseSettings.distortionStrength);
-        mountainNoiseMap = Noise.GenerateNoiseMap(settings.mapSize, settings.mapSize, seed, settings.noiseScale, zoom / 2f,
+        mountainNoiseMap = Noise.GenerateNoiseMap(settings.mapSize, settings.mapSize, settings.seed, settings.noiseScale, zoom / 2f,
                                                    settings.noiseSettings.octaves, settings.noiseSettings.persistance, settings.noiseSettings.lacunarity, settings.noiseSettings.offset, settings.noiseSettings.distortionStrength * 4);
         colorMap = new Color[settings.mapSize * settings.mapSize];
         elevationMap = new float[settings.mapSize, settings.mapSize];
@@ -102,7 +103,7 @@ public class MapGenerator : MonoBehaviour {
     }
 
     void GenerateBiomeMap() {
-        biomeGenerator = new BiomeGenerator(elevationMap, settings.mapSize, seed, settings.offsetTemperature,
+        biomeGenerator = new BiomeGenerator(elevationMap, settings.mapSize, settings.seed, settings.offsetTemperature,
                                             settings.offsetTemperatureCurveShift, settings.offsetTemperaturePeriod, settings.seaLevel, settings.noiseScale);
     }
 
@@ -202,11 +203,12 @@ public class MapGenerator : MonoBehaviour {
 
     public void OnSettingsUpdated() {
         if (autoUpdate) {
+            falloffMap = FalloffGenerator.GenerateFalloffMap(settings.mapSize);
             GenerateMap();
         }
     }
 
     public int GetSeed() {
-        return seed;
+        return settings.seed;
     }
 }

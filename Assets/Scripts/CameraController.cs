@@ -14,6 +14,8 @@ public class CameraController : MonoBehaviour {
     private float rightPivot;
     private float topPivot;
     private float botPivot;
+    private float maxCameraSize;
+    private float yBoundary;
 
     void Start() {
         cam = Camera.main;
@@ -31,9 +33,16 @@ public class CameraController : MonoBehaviour {
         topPivot = boundary.bounds.max.y - cameraBox.size.y / 2;
         leftPivot = boundary.bounds.min.x + cameraBox.size.x / 2;
         rightPivot = boundary.bounds.max.x - cameraBox.size.x / 2;
-
     }
+
+    void CalculateCameraBoundary() {
+        maxCameraSize = boundary.size.x / 2f / 16f * 9f;
+    }
+
     void Update() {
+        if (boundary.size.x < cameraBox.size.x) {
+            cameraBox.size = boundary.size;
+        }
         AspectRatioBoxChange();
         CalculateCameraPivot();
         Vector3 targetPosition = transform.position;
@@ -49,6 +58,7 @@ public class CameraController : MonoBehaviour {
             Mathf.Clamp(targetPosition.x, leftPivot, rightPivot),
             Mathf.Clamp(targetPosition.y, botPivot, topPivot),
             transform.position.z);
-        cam.orthographicSize = Mathf.Clamp(tagetSize, 100, 1400);
+        CalculateCameraBoundary();
+        cam.orthographicSize = Mathf.Clamp(tagetSize, 100, maxCameraSize);
     }
 }

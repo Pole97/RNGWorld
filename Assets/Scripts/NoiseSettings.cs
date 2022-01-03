@@ -16,7 +16,4 @@ public class NoiseSettings : ScriptableObject {
 
     public Vector2 offset;
 
-    // Constrain values on the Unity editor
-
-
 }

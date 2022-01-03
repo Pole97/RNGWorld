@@ -26,6 +26,8 @@ public class Settings : ScriptableObject {
         public static Color unknown = new Color(0 / 255f, 12 / 255f, 13 / 255f, 1);
     }
 
+    public int seed;
+
     public int mapSize = 500;
     public float noiseScale = 50f;
 
