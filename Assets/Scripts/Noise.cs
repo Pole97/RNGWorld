@@ -75,4 +75,5 @@ public static class Noise {
         float wiggleDensity = 2.7f;
         return (Mathf.PerlinNoise(x * wiggleDensity, y * wiggleDensity) * 2f) - 1f;
     }
+
 }

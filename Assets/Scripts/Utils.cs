@@ -68,11 +68,11 @@ public class Utils {
         return m;
     }
 
-    public static bool linearBound2(float a, float b, float minA, float minB) {
+    public static bool LinearBound2(float a, float b, float minA, float minB) {
         return a / minA + b / minB >= 1f;
     }
 
-    public static bool linearBound3(float a, float b, float c, float minA, float minB, float minC) {
+    public static bool LinearBound3(float a, float b, float c, float minA, float minB, float minC) {
         return a / minA + b / minB + c / minC >= 1f;
     }
 

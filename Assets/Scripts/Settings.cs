@@ -6,9 +6,7 @@ using UnityEngine;
 public class Settings : ScriptableObject {
     [System.Serializable]
     public class BiomeColourSettings {
-
         //biome map
-
         public static Color deepOcean = new Color(45 / 255f, 75 / 255f, 155 / 255f, 1);
         public static Color ocean = new Color(65 / 255f, 105 / 255f, 255 / 255f, 1);
         public static Color lake = new Color(100 / 255f, 125 / 255f, 240 / 255f, 1);
@@ -26,30 +24,21 @@ public class Settings : ScriptableObject {
         public static Color desert = new Color(238 / 255f, 185 / 255f, 165 / 255f, 1);
         public static Color red = new Color(255 / 255f, 12 / 255f, 13 / 255f, 1);
         public static Color unknown = new Color(0 / 255f, 12 / 255f, 13 / 255f, 1);
+    }
 
-        public Biome[] biomes;
-        //public NoiseSettings noise;
-        public float noiseOffset;
-        public float noiseStrength;
-        [Range(0, 1)]
-        public float blendAmount;
+    public int mapSize = 500;
+    public float noiseScale = 0f;
+    public HeightColor[] heightColors;
+    public NoiseSettings noise;
+    public float noiseOffset;
+    public float noiseStrength;
 
-        [System.Serializable]
-        public class Biome {
-            public Gradient gradient;
-            public Color tint;
-            [Range(0, 1)]
-            public float startHeight;
-            [Range(0, 1)]
-            public float tintPercent;
-        }
+    [System.Serializable]
+    public class HeightColor {
+        public string name;
+        public float height;
+        public Color color;
     }
 
 }
 
-[System.Serializable]
-public struct TerrainType {
-    public string name;
-    public float height;
-    public Color color;
-}

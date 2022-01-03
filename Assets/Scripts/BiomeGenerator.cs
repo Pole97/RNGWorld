@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using UnityEngine;
 
 public class BiomeGenerator {
@@ -390,7 +391,7 @@ public class BiomeGenerator {
     }
 
     public string GetBiomeLand(float temperature, float rain, float uneveness) {
-        if (!Utils.linearBound3(temperature, rain, uneveness, 0.3f, 0.5f, -1.5f)) {
+        if (!Utils.LinearBound3(temperature, rain, uneveness, 0.3f, 0.5f, -1.5f)) {
             if (temperature < 0.2f) {
                 return "Snow";
             } else {
@@ -398,14 +399,14 @@ public class BiomeGenerator {
             }
         }
 
-        if (!Utils.linearBound2(temperature, rain, 0.4f, 1f)) {
+        if (!Utils.LinearBound2(temperature, rain, 0.4f, 1f)) {
             return "Tundra";
         }
 
-        if (!Utils.linearBound2(1 - temperature, rain, 1f - (-0.2f), 0.3f)) {
-            if (Utils.linearBound2(temperature, rain, 0.6f, -1f)) {
+        if (!Utils.LinearBound2(1 - temperature, rain, 1f - (-0.2f), 0.3f)) {
+            if (Utils.LinearBound2(temperature, rain, 0.6f, -1f)) {
                 return "Desert";
-            } else if (!Utils.linearBound2(1f - temperature, rain, 1f - (-1f), 0.1f)) {
+            } else if (!Utils.LinearBound2(1f - temperature, rain, 1f - (-1f), 0.1f)) {
                 return "Desert";
             }
             return "Grassland";

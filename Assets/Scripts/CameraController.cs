@@ -49,6 +49,6 @@ public class CameraController : MonoBehaviour {
             Mathf.Clamp(targetPosition.x, leftPivot, rightPivot),
             Mathf.Clamp(targetPosition.y, botPivot, topPivot),
             transform.position.z);
-        cam.orthographicSize = Mathf.Clamp(tagetSize, 100, 1000);
+        cam.orthographicSize = Mathf.Clamp(tagetSize, 100, 1400);
     }
 }
