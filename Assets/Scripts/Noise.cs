@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using Unity.Mathematics;
 using UnityEngine;
 
 public static class Noise {
@@ -36,10 +37,10 @@ public static class Noise {
                     float sampleX = (x - halfWidth) / scale * frequency + octaveOffset[i].x / scale * frequency;
                     float sampleY = (y - halfHeight) / scale * frequency + octaveOffset[i].y / scale * frequency;
 
-                    float perlinValue = (DistortedNoise(sampleX / zoom2, sampleY / zoom2, distortionStrength, zoom2) * 2f) - 1f;
+                    float noiseValue = (DistortedNoise(sampleX / zoom2, sampleY / zoom2, distortionStrength, zoom2) * 2f) - 1f;
                     //float perlinValue = 2 * (0.5f - MathF.Abs(0.5f - DistortedNoise(sampleX, sampleY, distortionStrength)));
 
-                    noiseHeight += perlinValue * amplitude;
+                    noiseHeight += noiseValue * amplitude;
 
                     amplitude *= persistance;
                     frequency *= lacunarity;
@@ -68,12 +69,14 @@ public static class Noise {
     public static float DistortedNoise(float x, float y, float distortionStrength, float scale) {
         float xDistortion = distortionStrength * Distort(x / scale, y / scale);
         float yDistortion = distortionStrength * Distort(x / scale, y / scale);
-        return (Mathf.PerlinNoise(x + xDistortion / scale, y + yDistortion / scale) * 2f) - 1f;
+        //return (Mathf.PerlinNoise(x + xDistortion / scale, y + yDistortion / scale) * 2f) - 1f;
+        return (noise.snoise(new float2(x + xDistortion / scale, y + yDistortion / scale)) * 2f) - 1f;
     }
 
     public static float Distort(float x, float y) {
         float wiggleDensity = 2.7f;
-        return (Mathf.PerlinNoise(x * wiggleDensity, y * wiggleDensity) * 2f) - 1f;
+        //return (Mathf.PerlinNoise(x * wiggleDensity, y * wiggleDensity) * 2f) - 1f;
+        return (noise.snoise(new float2(x * wiggleDensity, y * wiggleDensity)) * 2f) - 1f;
     }
 
 }

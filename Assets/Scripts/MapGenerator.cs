@@ -1,9 +1,7 @@
 using System;
-using System.CodeDom.Compiler;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
-using UnityEditor;
 using UnityEngine;
 
 
@@ -11,43 +9,28 @@ public class MapGenerator : MonoBehaviour {
 
     public enum DrawMode { NoiseMap, ColorMap, BiomeMap, FalloffMap, TemperatureMap, PrecipitationMap };
     public DrawMode drawMode;
-
-
-    float zoom2;
+    float zoom;
 
     public Settings settings;
-
-    public NoiseSettings noiseSettings;
-
     [HideInInspector]
     public bool noiseSettingsFaldout;
+    [HideInInspector]
+    public bool settingsFaldout;
 
     public int seed;
     TMP_Text seedText;
     TMP_InputField inputSeed;
 
-    public bool useFalloff;
-
     public bool autoUpdate;
-
-    public TerrainType[] regions;
 
     float[,] falloffMap;
     float[,] baseNoiseMap, mountainNoiseMap, elevationMap;
-    [Range(0, 1f)]
-    public float seaLevel;
+
     BiomeGenerator biomeGenerator;
-    [Range(0, 2f)]
-    public float offsetTemperaturePeriod = 0.7f;
-    public float offsetTemperatureCurveShift = 0f;
-    [Range(-0.5f, 0.5f)]
-    public float offsetTemperature = 0f;
     Color[] colorMap;
-    public int minOceanSize = 5000;
 
     void Awake() {
         falloffMap = FalloffGenerator.GenerateFalloffMap(settings.mapSize);
-        zoom2 = settings.mapSize / 100f;
     }
 
     void Start() {
@@ -89,25 +72,22 @@ public class MapGenerator : MonoBehaviour {
         }
     }
 
-    void Initialize() {
-        GenerateHeightMap();
-    }
-
     void GenerateHeightMap() {
-        baseNoiseMap = Noise.GenerateNoiseMap(settings.mapSize, settings.mapSize, seed + 66, settings.noiseScale, zoom2, 2, 0.5f,
-                                                        noiseSettings.lacunarity, noiseSettings.offset, noiseSettings.distortionStrength);
-        mountainNoiseMap = Noise.GenerateNoiseMap(settings.mapSize, settings.mapSize, seed, settings.noiseScale, zoom2 / 2f,
-                                                noiseSettings.octaves, noiseSettings.persistance, noiseSettings.lacunarity, noiseSettings.offset, noiseSettings.distortionStrength * 4);
+        zoom = settings.mapSize / 100f;
+        baseNoiseMap = Noise.GenerateNoiseMap(settings.mapSize, settings.mapSize, seed + 66, settings.noiseScale, zoom, 2, 0.5f,
+                                                settings.noiseSettings.lacunarity, settings.noiseSettings.offset, settings.noiseSettings.distortionStrength);
+        mountainNoiseMap = Noise.GenerateNoiseMap(settings.mapSize, settings.mapSize, seed, settings.noiseScale, zoom / 2f,
+                                                   settings.noiseSettings.octaves, settings.noiseSettings.persistance, settings.noiseSettings.lacunarity, settings.noiseSettings.offset, settings.noiseSettings.distortionStrength * 4);
         colorMap = new Color[settings.mapSize * settings.mapSize];
         elevationMap = new float[settings.mapSize, settings.mapSize];
+
 
         for (int y = 0; y < settings.mapSize; y++) {
             for (int x = 0; x < settings.mapSize; x++) {
                 baseNoiseMap[x, y] = (float)Math.Tanh(baseNoiseMap[x, y] * 4f - 0.1f);
                 mountainNoiseMap[x, y] *= 2f;
                 mountainNoiseMap[x, y] = (mountainNoiseMap[x, y] + baseNoiseMap[x, y]) / 2f;
-                //elevationMap[x, y] = (float)Math.Tanh(falloffMap[x, y] + baseNoiseMap[x, y] * 2f - 0.1f);
-                if (useFalloff) {
+                if (settings.useFalloff) {
                     elevationMap[x, y] = Mathf.Clamp(mountainNoiseMap[x, y] - falloffMap[x, y], -1f, 1f);
                 } else {
                     elevationMap[x, y] = Mathf.Clamp(mountainNoiseMap[x, y], -1f, 1f);
@@ -115,14 +95,15 @@ public class MapGenerator : MonoBehaviour {
             }
         }
         // fill inland oceans
-        elevationMap = FillSmallOceans(elevationMap, minOceanSize, seaLevel, seaLevel + 0.1f);
-        elevationMap = FillSmallOceans(elevationMap, minOceanSize, seaLevel + 0.01f, seaLevel + 0.05f);
+        elevationMap = FillSmallOceans(elevationMap, settings.minOceanSize, settings.seaLevel, settings.seaLevel + 0.1f);
+        elevationMap = FillSmallOceans(elevationMap, settings.minOceanSize, settings.seaLevel + 0.01f, settings.seaLevel + 0.05f);
         // fill small islands
-        elevationMap = Utils.ReverseMatrix(FillSmallOceans(Utils.ReverseMatrix(elevationMap), 10, seaLevel, seaLevel + 0.05f));
+        elevationMap = Utils.ReverseMatrix(FillSmallOceans(Utils.ReverseMatrix(elevationMap), 10, settings.seaLevel, settings.seaLevel + 0.05f));
     }
 
     void GenerateBiomeMap() {
-        biomeGenerator = new BiomeGenerator(elevationMap, settings.mapSize, seed, offsetTemperature, offsetTemperatureCurveShift, offsetTemperaturePeriod, seaLevel, settings.noiseScale);
+        biomeGenerator = new BiomeGenerator(elevationMap, settings.mapSize, seed, settings.offsetTemperature,
+                                            settings.offsetTemperatureCurveShift, settings.offsetTemperaturePeriod, settings.seaLevel, settings.noiseScale);
     }
 
     public void GenerateMap() {
@@ -185,9 +166,9 @@ public class MapGenerator : MonoBehaviour {
     }
 
     public void ColorPixel(float value, int x, int y) {
-        for (int i = 0; i < regions.Length; i++) {
-            if (value <= regions[i].height) {
-                colorMap[y * settings.mapSize + x] = regions[i].color;
+        for (int i = 0; i < settings.regions.Length; i++) {
+            if (value <= settings.regions[i].height) {
+                colorMap[y * settings.mapSize + x] = settings.regions[i].color;
                 break;
             }
         }
@@ -196,7 +177,7 @@ public class MapGenerator : MonoBehaviour {
     public void DisplayMap() {
         MapDisplay display = FindObjectOfType<MapDisplay>();
         if (drawMode == DrawMode.NoiseMap) {
-            display.DrawTexture(TextureGenerator.TextureFromHeightMap(baseNoiseMap));
+            display.DrawTexture(TextureGenerator.TextureFromHeightMap(elevationMap));
         } else if (drawMode == DrawMode.ColorMap) {
             display.DrawTexture(TextureGenerator.TextureFromColorMap(colorMap, settings.mapSize, settings.mapSize));
         } else if (drawMode == DrawMode.FalloffMap) {
@@ -215,12 +196,11 @@ public class MapGenerator : MonoBehaviour {
 
     public void OnNoiseSettingsUpdated() {
         if (autoUpdate) {
-            GenerateBiomeMap();
-            DisplayMap();
+            GenerateMap();
         }
     }
 
-    public void OnBiomeSettingsUpdated() {
+    public void OnSettingsUpdated() {
         if (autoUpdate) {
             GenerateMap();
         }
@@ -230,11 +210,3 @@ public class MapGenerator : MonoBehaviour {
         return seed;
     }
 }
-
-[System.Serializable]
-public struct TerrainType {
-    public string name;
-    public float height;
-    public Color color;
-}
-

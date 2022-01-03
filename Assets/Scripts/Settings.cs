@@ -27,14 +27,22 @@ public class Settings : ScriptableObject {
     }
 
     public int mapSize = 500;
-    public float noiseScale = 0f;
-    public HeightColor[] heightColors;
-    public NoiseSettings noise;
-    public float noiseOffset;
-    public float noiseStrength;
+    public float noiseScale = 50f;
+    [HideInInspector]
+    public NoiseSettings noiseSettings;
+    public HeightColor[] regions;
+    public bool useFalloff = true;
+    [Range(0, 1f)]
+    public float seaLevel = 0f;
+    [Range(0, 2f)]
+    public float offsetTemperaturePeriod = 1.4f;
+    public float offsetTemperatureCurveShift = 2.7f;
+    [Range(-0.5f, 0.5f)]
+    public float offsetTemperature = 0f;
+    public int minOceanSize = 5000;
 
     [System.Serializable]
-    public class HeightColor {
+    public struct HeightColor {
         public string name;
         public float height;
         public Color color;
