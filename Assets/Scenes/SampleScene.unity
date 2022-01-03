@@ -1645,11 +1645,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b04e75877e3fec349926f401e4d91c87, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+<<<<<<< HEAD
   drawMode: 2
   settings: {fileID: 11400000, guid: 985982f5d3953bf4ca78b069c367263e, type: 2}
   noiseSettingsFaldout: 1
   settingsFaldout: 1
   seed: 44545
+=======
+  drawMode: 0
+  settings: {fileID: 11400000, guid: 985982f5d3953bf4ca78b069c367263e, type: 2}
+  noiseSettings: {fileID: 11400000, guid: 686953d6400ba4a4d8346287ca3f90ef, type: 2}
+  noiseSettingsFaldout: 1
+  settingsFaldout: 1
+  seed: 4454
+>>>>>>> c0fe8bd3e97c57677c64076555169ecba64c24d7
   autoUpdate: 0
 --- !u!114 &1158349630
 MonoBehaviour:

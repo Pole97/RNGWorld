@@ -14,7 +14,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   mapSize: 500
   noiseScale: 40
+<<<<<<< HEAD
   noiseSettings: {fileID: 11400000, guid: 686953d6400ba4a4d8346287ca3f90ef, type: 2}
+=======
+>>>>>>> c0fe8bd3e97c57677c64076555169ecba64c24d7
   regions:
   - name: 
     height: 0

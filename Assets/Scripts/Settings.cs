@@ -28,6 +28,7 @@ public class Settings : ScriptableObject {
 
     public int mapSize = 500;
     public float noiseScale = 50f;
+
     [HideInInspector]
     public NoiseSettings noiseSettings;
     public HeightColor[] regions;
