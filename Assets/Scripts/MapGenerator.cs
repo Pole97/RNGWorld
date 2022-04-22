@@ -103,7 +103,7 @@ public class MapGenerator : MonoBehaviour {
     }
 
     void GenerateBiomeMap() {
-        biomeGenerator = new BiomeGenerator(elevationMap, settings.mapSize, settings.seed, settings.offsetTemperature,
+        biomeGenerator = new BiomeGenerator(elevationMap, settings.mapSize, settings.seed, settings.amplitude, settings.offsetTemperature,
                                             settings.offsetTemperatureCurveShift, settings.offsetTemperaturePeriod, settings.seaLevel, settings.noiseScale);
     }
 
@@ -184,7 +184,7 @@ public class MapGenerator : MonoBehaviour {
         } else if (drawMode == DrawMode.FalloffMap) {
             display.DrawTexture(TextureGenerator.TextureFromHeightMap(FalloffGenerator.GenerateFalloffMap(settings.mapSize)));
         } else if (drawMode == DrawMode.TemperatureMap) {
-            biomeGenerator.GenerateTemperatureMap();
+            biomeGenerator.GenerateTemperatureMap(); ;
             display.DrawTexture(TextureGenerator.TextureFromColorMap(biomeGenerator.temperatureColorMap, settings.mapSize, settings.mapSize));
         } else if (drawMode == DrawMode.PrecipitationMap) {
             biomeGenerator.GenerateTemperatureMap();
@@ -210,5 +210,23 @@ public class MapGenerator : MonoBehaviour {
 
     public int GetSeed() {
         return settings.seed;
+    }
+    private void SaveTexture(Texture2D texture, string name) {
+        //first Make sure you're using RGB24 as your texture format
+        Texture2D texture2D = new Texture2D(settings.mapSize, settings.mapSize, TextureFormat.RGB24, false);
+        //then Save To Disk as PNG
+        byte[] bytes = texture.EncodeToPNG();
+        var dirPath = Application.dataPath + "/SavedImages";
+        if (!System.IO.Directory.Exists(dirPath)) {
+            System.IO.Directory.CreateDirectory(dirPath);
+        }
+        var img_name = dirPath + "/img_" + name + ".png";
+        if (!System.IO.File.Exists(img_name)) {
+            System.IO.File.WriteAllBytes(img_name, bytes);
+            Debug.Log(bytes.Length / 1024 + "Kb was saved as: " + dirPath);
+        }
+#if UNITY_EDITOR
+        UnityEditor.AssetDatabase.Refresh();
+#endif
     }
 }

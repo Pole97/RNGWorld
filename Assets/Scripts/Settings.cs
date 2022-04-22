@@ -39,6 +39,8 @@ public class Settings : ScriptableObject {
     public float seaLevel = 0f;
     [Range(0, 2f)]
     public float offsetTemperaturePeriod = 1.4f;
+
+    public float amplitude = 1f;
     public float offsetTemperatureCurveShift = 2.7f;
     [Range(-0.5f, 0.5f)]
     public float offsetTemperature = 0f;

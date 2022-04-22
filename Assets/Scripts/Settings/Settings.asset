@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e2a33551605fddc4d8521d68b4e4e505, type: 3}
   m_Name: Settings
   m_EditorClassIdentifier: 
+  seed: 894736598
   mapSize: 500
   noiseScale: 40
   noiseSettings: {fileID: 11400000, guid: 686953d6400ba4a4d8346287ca3f90ef, type: 2}
@@ -34,6 +35,7 @@ MonoBehaviour:
   useFalloff: 1
   seaLevel: 0
   offsetTemperaturePeriod: 1.4
+  amplitude: 1
   offsetTemperatureCurveShift: 2.7
   offsetTemperature: 0
   minOceanSize: 5000

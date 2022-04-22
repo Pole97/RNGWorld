@@ -69,14 +69,14 @@ public static class Noise {
     public static float DistortedNoise(float x, float y, float distortionStrength, float scale) {
         float xDistortion = distortionStrength * Distort(x / scale, y / scale);
         float yDistortion = distortionStrength * Distort(x / scale, y / scale);
-        //return (Mathf.PerlinNoise(x + xDistortion / scale, y + yDistortion / scale) * 2f) - 1f;
-        return (noise.snoise(new float2(x + xDistortion / scale, y + yDistortion / scale)) * 2f) - 1f;
+        return (Mathf.PerlinNoise(x + xDistortion / scale, y + yDistortion / scale) * 2f) - 1f;             // Perlin noise
+        //return (noise.snoise(new float2(x + xDistortion / scale, y + yDistortion / scale)) * 2f) - 1f;    // Simplex noise
     }
 
     public static float Distort(float x, float y) {
         float wiggleDensity = 2.7f;
-        //return (Mathf.PerlinNoise(x * wiggleDensity, y * wiggleDensity) * 2f) - 1f;
-        return (noise.snoise(new float2(x * wiggleDensity, y * wiggleDensity)) * 2f) - 1f;
+        return (Mathf.PerlinNoise(x * wiggleDensity, y * wiggleDensity) * 2f) - 1f;             // Perlin noise
+        //return (noise.snoise(new float2(x * wiggleDensity, y * wiggleDensity)) * 2f) - 1f;    // Simplex noise
     }
 
 }

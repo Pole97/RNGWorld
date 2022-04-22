@@ -21,6 +21,7 @@ public class BiomeGenerator {
     int mapSize;
     int seed;
     float offsetTemperatureCurveShift;
+    float amplitude = 1;
     float offsetTemperature;
     float offsetTemperaturePeriod;
     float seaLevel, noiseScale;
@@ -45,12 +46,13 @@ public class BiomeGenerator {
             {"Desert",Settings.BiomeColourSettings.desert},
             {"Red",Settings.BiomeColourSettings.red},
             {"Unknown",Settings.BiomeColourSettings.unknown}
-        };
+    };
 
 
-    public BiomeGenerator(float[,] elevationMap, int mapSize, int seed, float offsetTemperature, float offsetTemperatureCurveShift, float offsetTemperaturePeriod, float seaLevel, float noiseScale) {
+    public BiomeGenerator(float[,] elevationMap, int mapSize, int seed, float amplitude, float offsetTemperature, float offsetTemperatureCurveShift, float offsetTemperaturePeriod, float seaLevel, float noiseScale) {
         this.elevationMap = elevationMap;
         this.mapSize = mapSize;
+        this.amplitude = amplitude;
         this.offsetTemperatureCurveShift = offsetTemperatureCurveShift;
         this.offsetTemperature = offsetTemperature;
         this.offsetTemperaturePeriod = offsetTemperaturePeriod;
@@ -74,7 +76,7 @@ public class BiomeGenerator {
             for (int x = 0; x < mapSize; x++) {
                 //float latTemperature;
 
-                float latTemperature = Mathf.Pow(Mathf.Cos((latitude + offsetTemperatureCurveShift) / offsetTemperaturePeriod), 2) * 0.8f + 0.1f;
+                float latTemperature = Mathf.Pow(amplitude * Mathf.Cos((latitude + offsetTemperatureCurveShift) / offsetTemperaturePeriod), 2) * 0.8f + 0.1f;
 
                 if (elevationMap[x, y] >= seaLevel) {
                     temperatureMap[x, y] = latTemperature * (1.1f - Mathf.Clamp(1.2f * (elevationMap[x, y] - seaLevel), 0.1f, 1.1f)) + offsetTemperature;
@@ -87,7 +89,7 @@ public class BiomeGenerator {
                 if (temperatureMap[x, y] <= 0.505f && temperatureMap[x, y] >= 0.495f) {
                     temperatureColorMap[y * mapSize + x] = Color.green;
                 } else if (temperatureMap[x, y] <= 0.305f && temperatureMap[x, y] >= 0.295f) {
-                    temperatureColorMap[y * mapSize + x] = Color.blue;
+                    temperatureColorMap[y * mapSize + x] = Color.cyan;
                 } else if (temperatureMap[x, y] <= 0.802f && temperatureMap[x, y] >= 0.798f) {
                     temperatureColorMap[y * mapSize + x] = Color.yellow;
                 }
